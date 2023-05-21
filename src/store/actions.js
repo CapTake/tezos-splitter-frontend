@@ -1,7 +1,26 @@
 import { requestPermissions, getActiveAccount, clearActiveAccount, getContract, Tezos } from '../utils/tezos'
 import { BigNumber } from 'bignumber.js'
+import { useToast } from 'vue-toastification'
 import tzdomains from '@/utils/tezos-domains'
 import tzkt from '../utils/tzkt'
+import { HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr'
+
+const connection = new HubConnectionBuilder()
+  .withUrl(`${process.env.VUE_APP_TZKT_API_URL}/v1/ws`)
+  .build()
+
+async function initConnection () {
+  if (connection.state !== HubConnectionState.Disconnected) return
+
+  await connection.start()
+
+  await connection.invoke('SubscribeToEvents', {
+    contract: process.env.VUE_APP_FACTORY_CONTRACT,
+    tag: 'splitter_created'
+  })
+}
+
+const toast = useToast()
 
 export default {
   async init ({ state, dispatch, commit }) {
@@ -14,6 +33,21 @@ export default {
         .then(domain => commit('userDomain', domain))
       dispatch('listUserSplitters')
     }
+
+    initConnection()
+
+    connection.onclose(initConnection)
+
+    connection.on('events', ({ type, data }) => {
+      if (type === 1) {
+        dispatch('listUserSplitters')
+        const payload = data[0]?.payload
+        console.log(payload)
+        if (payload?.address_0 === state.userAddress) {
+          toast.success('Splitter Contract Successfully deployed')
+        }
+      }
+    })
 
     const contract = await getContract(process.env.VUE_APP_FACTORY_CONTRACT)
 
@@ -82,10 +116,10 @@ export default {
       {
         active: true,
         'select.values': 'key,value',
-        'key.address_0': state.userAddress
+        'key.address_0': state.userAddress,
+        'sort.desc': 'id'
       }
     )
-    console.log(res)
     // eslint-disable-next-line camelcase
     commit('splitters', res.map(([{ address_1 }, ts]) => ({ splitter: address_1, createdAt: new Date(ts) })))
   },
@@ -105,7 +139,7 @@ export default {
 
     const contract = await getContract(splitter)
 
-    const params = token ? [amount, token.address, token.id] : []
+    const params = token?.address ? [amount, token.address, token.id] : []
 
     const op = await contract.methods.distribute(...params).send()
 
@@ -143,9 +177,7 @@ export default {
 
     const balance = await Tezos.tz.getBalance(address)
 
-    res.push({ balance })
-
-    return res
+    return [{ balance, token: { name: 'Tezos', decimals: '6', symbol: 'XTZ' } }, ...res]
   },
 
   async getSplitterShares (_, address) {

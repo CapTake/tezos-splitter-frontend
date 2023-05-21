@@ -3,6 +3,7 @@ const webpack = require('webpack')
 
 module.exports = defineConfig({
   transpileDependencies: true,
+  productionSourceMap: false,
   configureWebpack: {
     resolve: {
       fallback: {
