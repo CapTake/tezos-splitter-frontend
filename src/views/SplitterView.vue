@@ -19,7 +19,7 @@
               <div>Address</div>
               <div>Share</div>
             </div>
-            <div v-for="item in shares" :key="item.address" class="flex justify-between">
+            <div v-for="item in shares" :key="item.address" class="flex justify-between mb-4">
               <a :href="explorerLink(item.address)" target="_blank" rel="noopener noreferrer" class="grow">
                 <AddressDisplay :value="item.address" :placeholder="item.label" />
               </a>
