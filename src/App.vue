@@ -62,3 +62,9 @@ const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
 </script>
+
+<style>
+#app {
+  min-height: calc(100vh - 5rem);
+}
+</style>

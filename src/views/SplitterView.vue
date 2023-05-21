@@ -1,7 +1,7 @@
 <template>
     <section class="w-full max-w-4xl mx-auto px-4 my-6 overflow-hidden">
       <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white text-center">
-        Splitter <a :href="explorerLink(addr)" target="_blank" rel="noopener noreferrer">{{ short }}</a>
+        Splitter <a :href="explorerLink(addr)" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500">{{ short }}</a>
       </h1>
       <TransitionGroup>
         <div v-if="loading" class="flex w-full justify-center items-center h-[40vh]">
@@ -20,7 +20,7 @@
               <div>Share</div>
             </div>
             <div v-for="item in shares" :key="item.address" class="flex justify-between mb-4">
-              <a :href="explorerLink(item.address)" target="_blank" rel="noopener noreferrer" class="grow">
+              <a :href="explorerLink(item.address)" target="_blank" rel="noopener noreferrer" class="grow hover:text-blue-500">
                 <AddressDisplay :value="item.address" :placeholder="item.label" />
               </a>
               <div class>
@@ -33,7 +33,7 @@
           <h2 class="mb-4 text-2xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-3xl dark:text-white text-center">Token balances</h2>
           <div v-for="b in balances" :key="b.token?.symbol + b.token?.address" class="flex flex-col md:flex-row md:gap-4 justify-between items-center mb-4 md:mb-6 hover:text-black dark:hover:text-white">
             <div class="text-elipsis overflow-hidden grow">
-              <a v-if="b.token.address" :href="explorerLink(b.token.address)" target="_blank" rel="noopener noreferrer">
+              <a v-if="b.token.address" :href="explorerLink(b.token.address)" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500">
                 {{ b.token.name || shortAddress(b.token.address, b.token.decimals) }}
               </a>
               <span v-else>
