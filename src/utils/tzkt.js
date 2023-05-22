@@ -17,5 +17,10 @@ export default {
 
   async getTokenBalances (address) {
     return makeRequest('/v1/tokens/balances', { account: address, 'select.values': 'token,balance', 'balance.gt': 0 })
+  },
+
+  // https://api.tzkt.io/#operation/Events_GetContractEvents
+  async getContractEvents (contract, params = {}) {
+    return makeRequest('/v1/contracts/events', { contract, ...params })
   }
 }

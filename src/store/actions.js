@@ -5,6 +5,8 @@ import tzdomains from '@/utils/tezos-domains'
 import tzkt from '../utils/tzkt'
 import { HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr'
 
+const SPLITTER_CREATED = 'splitter_created'
+
 const connection = new HubConnectionBuilder()
   .withUrl(`${process.env.VUE_APP_TZKT_API_URL}/v1/ws`)
   .build()
@@ -16,7 +18,7 @@ async function initConnection () {
 
   await connection.invoke('SubscribeToEvents', {
     contract: process.env.VUE_APP_FACTORY_CONTRACT,
-    tag: 'splitter_created'
+    tag: SPLITTER_CREATED
   })
 }
 
@@ -107,21 +109,41 @@ export default {
     }
   },
 
-  async listUserSplitters ({ state, commit }) {
+  async listSplitters ({ state, commit }, { address, limit = 1000, offset = 0 }) {
+    const { data: res } = address
+      ? await tzkt.getContractBigMapKeys(
+        process.env.VUE_APP_FACTORY_CONTRACT,
+        'holders',
+        {
+          active: true,
+          'select.values': 'key,value',
+          'sort.desc': 'id',
+          'key.address_0': address,
+          limit,
+          offset
+        }
+      )
+      : await tzkt.getContractEvents(
+        process.env.VUE_APP_FACTORY_CONTRACT,
+        {
+          tag: SPLITTER_CREATED,
+          limit,
+          offset,
+          'sort.desc': 'id',
+          'select.values': 'payload,timestamp'
+        }
+      )
+    // eslint-disable-next-line camelcase
+    return res.map(([{ address_1 }, ts]) => ({ splitter: address_1, createdAt: new Date(ts) }))
+  },
+
+  async listUserSplitters ({ state, commit, dispatch }) {
     if (!state.userAddress) commit('splitters')
 
-    const { data: res } = await tzkt.getContractBigMapKeys(
-      process.env.VUE_APP_FACTORY_CONTRACT,
-      'holders',
-      {
-        active: true,
-        'select.values': 'key,value',
-        'key.address_0': state.userAddress,
-        'sort.desc': 'id'
-      }
-    )
+    const res = await dispatch('listSplitters', { address: state.userAddress })
+
     // eslint-disable-next-line camelcase
-    commit('splitters', res.map(([{ address_1 }, ts]) => ({ splitter: address_1, createdAt: new Date(ts) })))
+    commit('splitters', res)
   },
 
   async createSplitter ({ dispatch }, shareMap) {

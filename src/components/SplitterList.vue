@@ -1,7 +1,6 @@
 <template>
 <Transition mode="out-in">
-    <div v-if="connected">
-        <h2 v-show="splitters.length > 0" class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white text-center">Your splitters</h2>
+    <div v-if="ready">
         <div v-show="splitters.length > 0" class="flex gap-4 justify-between items-center pt-4 pb-2 text-gray-400 dark:text-gray-600 px-5 text-sm">
             <div>
                 Address
@@ -28,14 +27,13 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
 import { computed } from 'vue'
 import { UseTimeAgo } from '@vueuse/components'
+import { shortAddress } from '../utils/misc'
 
-const store = useStore()
+// eslint-disable-next-line no-undef
+const props = defineProps({ items: Array, ready: Boolean })
 
-const splitters = computed(() => store.state.splitters.map(({ splitter, createdAt }) => ({ splitter, label: `${splitter.slice(0, 9)}...${splitter.slice(-10)}`, createdAt })))
-
-const connected = computed(() => store.getters.connected)
+const splitters = computed(() => props.items.map(({ splitter, createdAt }) => ({ splitter, label: shortAddress(splitter, 9), createdAt })))
 
 </script>

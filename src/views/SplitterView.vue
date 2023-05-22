@@ -1,7 +1,7 @@
 <template>
     <section class="w-full max-w-4xl mx-auto px-4 my-6 overflow-hidden">
       <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white text-center">
-        Splitter <a :href="explorerLink(addr)" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500">{{ short }}</a>
+        Splitter <a :href="explorerLink(addr)" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500">{{ shortAddress(addr, 7) }}</a>
       </h1>
       <TransitionGroup>
         <div v-if="loading" class="flex w-full justify-center items-center h-[40vh]">
@@ -81,8 +81,6 @@ const store = useStore()
 const router = useRouter()
 
 const toast = useToast()
-
-const short = computed(() => `${props.addr.slice(0, 7)}...${props.addr.slice(-7)}`)
 
 const shares = ref([])
 
