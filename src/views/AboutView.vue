@@ -79,7 +79,7 @@
         <p>
           Splittez is free and non profit project.
           Every effort was made for it to function as intended but no guarantees provided.
-          Use it on your own risk. Responsibility is yours only.
+          Use it at your own risk. Responsibility is yours only.
         </p>
         <h3>
           Was smart contracts audited?
