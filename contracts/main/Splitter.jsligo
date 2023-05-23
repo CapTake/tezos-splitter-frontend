@@ -23,7 +23,7 @@ type return_ = [list<operation>, storage];
 const noop : list<operation> = list([]);
 
 const distribute_tez = (b : tez, s : storage) : return_ => {
-    let ops : list<operation> = list([]);
+    let ops : list<operation> = list([Tezos.emit("%spltr_dstr", [Tezos.get_sender(), b])]);
 
     for (const item of s.shares) {
         let [dest, share] = item;
@@ -39,7 +39,7 @@ const distribute_tokens = (p : distribute_param, s : storage) : return_ =>
 
             const fa12c = Option.unopt((Tezos.get_entrypoint_opt("%transfer", p.token[0]) as option<fa12>));
 
-            let ops : list<operation> = list([]);
+            let ops : list<operation> = list([Tezos.emit("%spltr_dstr", [Tezos.get_sender(), p])]);
 
             for (const item of s.shares) {
                 const [dest, share] = item;
@@ -57,6 +57,7 @@ const distribute_tokens = (p : distribute_param, s : storage) : return_ =>
             };
             return [
                 list([
+                    Tezos.emit("%spltr_dstr", [Tezos.get_sender(), p]),
                     Tezos.transaction(list([{from_: Tezos.get_self_address(), txs: txs}]), (0 as tez), fa2c)
                 ]),
                 s

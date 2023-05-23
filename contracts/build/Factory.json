@@ -506,6 +506,42 @@
                                                 "prim": "DUP",
                                                 "args": [
                                                   {
+                                                    "int": "2"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "prim": "SENDER"
+                                              },
+                                              {
+                                                "prim": "PAIR"
+                                              },
+                                              {
+                                                "prim": "EMIT",
+                                                "args": [
+                                                  {
+                                                    "prim": "pair",
+                                                    "args": [
+                                                      {
+                                                        "prim": "address"
+                                                      },
+                                                      {
+                                                        "prim": "mutez"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "annots": [
+                                                  "%spltr_dstr"
+                                                ]
+                                              },
+                                              {
+                                                "prim": "CONS"
+                                              },
+                                              {
+                                                "prim": "DUP",
+                                                "args": [
+                                                  {
                                                     "int": "3"
                                                   }
                                                 ]
@@ -834,6 +870,59 @@
                                                       "prim": "DUP",
                                                       "args": [
                                                         {
+                                                          "int": "3"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "prim": "SENDER"
+                                                    },
+                                                    {
+                                                      "prim": "PAIR"
+                                                    },
+                                                    {
+                                                      "prim": "EMIT",
+                                                      "args": [
+                                                        {
+                                                          "prim": "pair",
+                                                          "args": [
+                                                            {
+                                                              "prim": "address"
+                                                            },
+                                                            {
+                                                              "prim": "nat",
+                                                              "annots": [
+                                                                "%amount"
+                                                              ]
+                                                            },
+                                                            {
+                                                              "prim": "pair",
+                                                              "args": [
+                                                                {
+                                                                  "prim": "address"
+                                                                },
+                                                                {
+                                                                  "prim": "nat"
+                                                                }
+                                                              ],
+                                                              "annots": [
+                                                                "%token"
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ],
+                                                      "annots": [
+                                                        "%spltr_dstr"
+                                                      ]
+                                                    },
+                                                    {
+                                                      "prim": "CONS"
+                                                    },
+                                                    {
+                                                      "prim": "DUP",
+                                                      "args": [
+                                                        {
                                                           "int": "4"
                                                         }
                                                       ]
@@ -1131,18 +1220,7 @@
                                                       "prim": "DIG",
                                                       "args": [
                                                         {
-                                                          "int": "2"
-                                                        }
-                                                      ]
-                                                    },
-                                                    {
-                                                      "prim": "DROP"
-                                                    },
-                                                    {
-                                                      "prim": "DIG",
-                                                      "args": [
-                                                        {
-                                                          "int": "2"
+                                                          "int": "3"
                                                         }
                                                       ]
                                                     },
@@ -1224,6 +1302,59 @@
                                                     },
                                                     {
                                                       "prim": "TRANSFER_TOKENS"
+                                                    },
+                                                    {
+                                                      "prim": "CONS"
+                                                    },
+                                                    {
+                                                      "prim": "DIG",
+                                                      "args": [
+                                                        {
+                                                          "int": "2"
+                                                        }
+                                                      ]
+                                                    },
+                                                    {
+                                                      "prim": "SENDER"
+                                                    },
+                                                    {
+                                                      "prim": "PAIR"
+                                                    },
+                                                    {
+                                                      "prim": "EMIT",
+                                                      "args": [
+                                                        {
+                                                          "prim": "pair",
+                                                          "args": [
+                                                            {
+                                                              "prim": "address"
+                                                            },
+                                                            {
+                                                              "prim": "nat",
+                                                              "annots": [
+                                                                "%amount"
+                                                              ]
+                                                            },
+                                                            {
+                                                              "prim": "pair",
+                                                              "args": [
+                                                                {
+                                                                  "prim": "address"
+                                                                },
+                                                                {
+                                                                  "prim": "nat"
+                                                                }
+                                                              ],
+                                                              "annots": [
+                                                                "%token"
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ],
+                                                      "annots": [
+                                                        "%spltr_dstr"
+                                                      ]
                                                     },
                                                     {
                                                       "prim": "CONS"
@@ -1560,10 +1691,10 @@
                   ]
                 },
                 {
-                  "prim": "DIG",
+                  "prim": "DUP",
                   "args": [
                     {
-                      "int": "3"
+                      "int": "4"
                     }
                   ]
                 },
@@ -1614,7 +1745,7 @@
                   ]
                 },
                 {
-                  "prim": "DUP",
+                  "prim": "DIG",
                   "args": [
                     {
                       "int": "3"
@@ -1622,7 +1753,18 @@
                   ]
                 },
                 {
+                  "prim": "DUP",
+                  "args": [
+                    {
+                      "int": "4"
+                    }
+                  ]
+                },
+                {
                   "prim": "CDR"
+                },
+                {
+                  "prim": "PAIR"
                 },
                 {
                   "prim": "SENDER"
@@ -1641,6 +1783,9 @@
                         },
                         {
                           "prim": "address"
+                        },
+                        {
+                          "prim": "nat"
                         }
                       ]
                     }

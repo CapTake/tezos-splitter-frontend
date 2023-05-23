@@ -8,7 +8,9 @@
     "build:dev": "vue-cli-service build --mode development",
     "lint": "vue-cli-service lint",
     "deploy": "npx shipit production copyDist",
-    "compile": "cd contracts && node compile.mjs && cd .."
+    "compile": "cd contracts && node compile.mjs && cd ..",
+    "migrate": "node -r dotenv/config ./contracts/originate.js dotenv_config_path=./.env.testnet.local",
+    "migrate:mainnet": "node -r dotenv/config ./contracts/originate.js dotenv_config_path=./.env.mainnet.local"
   },
   "dependencies": {
     "@microsoft/signalr": "^7.0.5",
@@ -18,6 +20,7 @@
     "@taquito/tzip16": "^16.1.2",
     "@tezos-domains/resolver": "^1.25.0",
     "@tezos-domains/taquito-client": "^1.25.0",
+    "@tzkt/ext-taquito": "^2.2.0",
     "@vueuse/components": "^10.1.2",
     "@vueuse/core": "^10.1.2",
     "autoprefixer": "^10",
@@ -42,6 +45,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@taquito/signer": "^16.1.2",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",

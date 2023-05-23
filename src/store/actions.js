@@ -7,6 +7,8 @@ import { HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr'
 
 const SPLITTER_CREATED = 'splitter_created'
 
+const DISTRIBUTED = 'spltr_dstr'
+
 const connection = new HubConnectionBuilder()
   .withUrl(`${process.env.VUE_APP_TZKT_API_URL}/v1/ws`)
   .build()
@@ -19,6 +21,9 @@ async function initConnection () {
   await connection.invoke('SubscribeToEvents', {
     contract: process.env.VUE_APP_FACTORY_CONTRACT,
     tag: SPLITTER_CREATED
+  })
+  await connection.invoke('SubscribeToEvents', {
+    tag: DISTRIBUTED
   })
 }
 
@@ -41,26 +46,43 @@ export default {
     connection.onclose(initConnection)
 
     connection.on('events', ({ type, data }) => {
-      if (type === 1) {
-        dispatch('listUserSplitters')
-        const payload = data[0]?.payload
-        console.log(payload)
-        if (payload?.address_0 === state.userAddress) {
-          toast.success('Splitter Contract Successfully deployed')
-        }
+      if (type !== 1) return
+
+      const event = data[0]
+
+      if (!event) return
+
+      const { payload, tag, contract, timestamp } = event
+
+      console.log(payload, timestamp)
+
+      switch (tag) {
+        case SPLITTER_CREATED:
+          dispatch('listUserSplitters')
+
+          commit('deployed', payload.nat)
+
+          if (payload.address_0 === state.userAddress) {
+            toast.success('Splitter Contract Successfully deployed.')
+          }
+
+          break
+        case DISTRIBUTED:
+          // TODO: handle distribution event
+          // if (payload.address === state.userAddress) {
+          //   const message = `${payload.mutez ? 'Tezos' : 'Tokens'} successfully distributed.`
+
+          //   toast.success(message)
+          // }
+          console.log('distributed', contract.address)
       }
     })
 
     const contract = await getContract(process.env.VUE_APP_FACTORY_CONTRACT)
 
-    const poll = async () => {
-      const storage = await contract.storage()
+    const storage = await contract.storage()
 
-      commit('factoryStorage', storage)
-
-      setTimeout(poll, 10 * 1000)
-    }
-    poll()
+    commit('deployed', storage.splitters?.toNumber())
   },
 
   async resolveDomain (_, address) {
@@ -91,6 +113,7 @@ export default {
     }
 
     dispatch('resolveDomain', state.userAddress).then(domain => commit('userDomain', domain))
+
     dispatch('listUserSplitters')
   },
 
@@ -98,6 +121,7 @@ export default {
     await clearActiveAccount()
 
     commit('userAddress')
+
     commit('splitters')
   },
 

@@ -14,6 +14,11 @@
                  IF_NONE
                    { BALANCE ;
                      NIL operation ;
+                     DUP 2 ;
+                     SENDER ;
+                     PAIR ;
+                     EMIT %spltr_dstr (pair address mutez) ;
+                     CONS ;
                      DUP 3 ;
                      CAR ;
                      ITER { UNPAIR ;
@@ -53,6 +58,11 @@
                          CONTRACT %transfer (pair (address %from) (address %to) (nat %value)) ;
                          IF_NONE { PUSH string "option is None" ; FAILWITH } {} ;
                          NIL operation ;
+                         DUP 3 ;
+                         SENDER ;
+                         PAIR ;
+                         EMIT %spltr_dstr (pair address (nat %amount) (pair %token address nat)) ;
+                         CONS ;
                          DUP 4 ;
                          CAR ;
                          ITER { UNPAIR ;
@@ -96,9 +106,7 @@
                                 DIG 3 ;
                                 PAIR 3 ;
                                 CONS } ;
-                         DIG 2 ;
-                         DROP ;
-                         DIG 2 ;
+                         DIG 3 ;
                          NIL operation ;
                          DIG 3 ;
                          PUSH mutez 0 ;
@@ -108,6 +116,11 @@
                          PAIR ;
                          CONS ;
                          TRANSFER_TOKENS ;
+                         CONS ;
+                         DIG 2 ;
+                         SENDER ;
+                         PAIR ;
+                         EMIT %spltr_dstr (pair address (nat %amount) (pair %token address nat)) ;
                          CONS } } } }
            { IMPLICIT_ACCOUNT ;
              ADDRESS ;

@@ -21,7 +21,7 @@ export default createStore({
     },
     userDomain: (state, payload) => { state.userDomain = payload || '' },
     userWalletBalance: (state, payload) => { state.userWalletBalance = payload || new BigNumber(0) },
-    factoryStorage: (state, storage) => { state.splittersDeployed = storage?.splitters.toNumber() || 0 },
+    deployed: (state, n) => { state.splittersDeployed = n || 0 },
     splitters: (state, payload) => { state.splitters = payload || [] }
   },
   actions

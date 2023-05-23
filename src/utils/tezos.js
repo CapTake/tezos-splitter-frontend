@@ -1,9 +1,11 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito'
+import { TzktExtension } from '@tzkt/ext-taquito'
 import { Tzip12Module } from '@taquito/tzip12'
 import { Tzip16Module } from '@taquito/tzip16'
 
 const Tezos = new TezosToolkit(process.env.VUE_APP_TEZOS_RPC_URL)
+Tezos.addExtension(new TzktExtension({ url: process.env.VUE_APP_TZKT_API_URL }))
 Tezos.addExtension(new Tzip12Module())
 Tezos.addExtension(new Tzip16Module())
 Tezos.setPackerProvider(new MichelCodecPacker())
