@@ -7,7 +7,6 @@ module.exports = shipit => {
   shipit.initConfig({
     default: {
       deployTo: process.env.DEPLOY_TO
-      // repositoryUrl: 'https://github.com/user/super-project.git'
     },
     production: {
       servers: process.env.SERVER,

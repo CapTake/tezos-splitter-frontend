@@ -151,7 +151,17 @@ export default {
 
     const contract = await getContract(process.env.VUE_APP_FACTORY_CONTRACT)
 
-    const op = await contract.methods.default(shareMap).send()
+    const op = await contract.methods.create(shareMap).send()
+
+    return await op.confirmation(1)
+  },
+
+  async forgetSplitter ({ dispatch }, address) {
+    await dispatch('connectWallet')
+
+    const contract = await getContract(process.env.VUE_APP_FACTORY_CONTRACT)
+
+    const op = await contract.methods.forget(address).send()
 
     return await op.confirmation(1)
   },
@@ -167,6 +177,18 @@ export default {
 
     return await op.confirmation(1)
   },
+
+  // user discard their share in favor of another implicit account
+  async moveShare ({ dispatch }, { splitter, keyhash }) {
+    await dispatch('connectWallet')
+
+    const contract = await getContract(splitter)
+
+    const op = await contract.methods.move_share(keyhash).send()
+
+    return await op.confirmation(1)
+  },
+
   /*
     {
       "id": 68697835175937,

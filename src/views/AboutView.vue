@@ -74,7 +74,7 @@
           10 is sensible limit.
         </p>
         <h3>
-          My funds are lost, who is responsible?
+          My funds lost, who is responsible?
         </h3>
         <p>
           Splittez is free and non profit project.

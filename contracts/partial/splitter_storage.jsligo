@@ -1,0 +1,4 @@
+export type splitter_storage = {
+    total : nat,
+    shares : map<address, nat>
+};

@@ -1,0 +1,71 @@
+#include "../partial/splitter_storage.jsligo"
+
+type storage = {
+    splitters: nat,
+    holders: big_map<[address, address], timestamp>,
+    metadata: big_map<string, bytes>
+};
+
+type action =
+  | ["Create", map<address, nat>]
+  | ["Forget", address]
+  ;
+
+type return_ = [list<operation>, storage];
+
+const noop : list<operation> = list([]); 
+
+const originate_contract = (p: [option<key_hash>, tez, splitter_storage]) : [operation, address] =>
+    (Michelson `{ 
+        UNPAIR ;
+        UNPAIR ;
+        CREATE_CONTRACT 
+#include "../build/Splitter.tz"
+        ;
+        PAIR }`
+        as ((p: [option<key_hash>, tez, splitter_storage]) => [operation, address])
+    )(p);
+
+const create = (p : map<address, nat>, s : storage) : return_ => {
+    let total : nat = 0 as nat;
+    let parts : nat = 0 as nat;
+
+    for (const item of p) {
+        assert_with_error(item[1] > (0 as nat), "Share must be greater than 0");
+
+        parts += 1 as nat;
+
+        total += item[1];
+    };
+
+    assert_with_error(parts > (1 as nat), "At least 2 shareholders required");
+
+    let splitters = s.splitters + (1 as nat);
+
+    let holders = s.holders;
+
+    let delegate : option<key_hash> = (None() as option<key_hash>);
+
+    const originate = originate_contract([delegate, Tezos.get_amount(), { total: total, shares: p } as splitter_storage]);
+
+    for (const item of p) {
+        holders = Big_map.add([item[0], originate[1]], Tezos.get_now(), holders)
+    };
+
+    return [list([originate[0], Tezos.emit("%splitter_created", [Tezos.get_sender(), originate[1]])]), { ...s, splitters, holders }];
+};
+
+// Let user to 'forget' splitter. Just remove it from big_map.
+const forget = (p : address, s : storage) : return_ => {
+    assert(Tezos.get_amount() == (0 as tez));
+
+    let holders = Big_map.remove([Tezos.get_sender(), p], s.holders);
+
+    return [noop, { ...s, holders }];
+};
+
+const main = (p : action, s : storage) : return_ =>
+    match(p, {
+        Create: (p : map<address, nat>) => create(p, s),
+        Forget: (p : address) => forget(p, s)
+    });
