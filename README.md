@@ -1,10 +1,12 @@
-# tezos-splitter-frontend
+# Splittez - Tezos / FA2 / FA1.2 revenue splitter
+
+See it in action -> [https://splittez.click/](https://splittez.click/)
 
 ## Project setup
 ```
 yarn install
 ```
-
+## Frontend
 ### Compiles and hot-reloads for development
 ```
 yarn serve
@@ -20,5 +22,12 @@ yarn build
 yarn lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Smart Contracts
+
+Contracts are inside `contracts` directory
+
+### Compiles contacts
+```
+yarn compile
+```
+

@@ -1,7 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ContractListView from '../views/ContractListView.vue'
+import { useTitle } from '@vueuse/core'
 
+const title = useTitle()
 const routes = [
   {
     path: '/',
@@ -28,13 +30,19 @@ const routes = [
     name: 'splitter',
     meta: { title: 'Splittez - Splitter contract ' },
     props: true,
-    component: () => import(/* webpackChunkName: "about" */ '../views/SplitterView.vue')
+    component: () => import(/* webpackChunkName: "splitter" */ '../views/SplitterView.vue')
   },
   {
     path: '/create',
     name: 'create',
     meta: { title: 'Splittez - Create Splitter' },
-    component: () => import(/* webpackChunkName: "about" */ '../views/CreateView.vue')
+    component: () => import(/* webpackChunkName: "create" */ '../views/CreateView.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    meta: { title: 'Splittez - Page not found' },
+    component: () => import(/* webpackChunkName: "e404" */ '../views/NotFound.vue')
   }
 ]
 
@@ -45,7 +53,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   if (window) {
-    document.title = to.meta?.title || document.title
+    title.value = to.meta?.title || title.value
   }
 })
 
