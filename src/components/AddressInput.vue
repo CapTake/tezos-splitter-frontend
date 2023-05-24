@@ -14,7 +14,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { validateAddress } from '@taquito/utils'
+import { isValidAddress } from '../utils/tezos'
 import tzdomains from '../utils/tezos-domains'
 
 // eslint-disable-next-line no-undef
@@ -36,9 +36,9 @@ const onBlur = async () => {
   try {
     loading.value = true
 
-    const isValidAddress = validateAddress(address.value) === 3 && !address.value.startsWith('tz4')
+    const isValidAddr = isValidAddress(address.value) && !address.value.startsWith('tz4')
 
-    if (!isValidAddress) {
+    if (!isValidAddr) {
       const res = await tzdomains.resolveNameToAddress(address.value)
       if (!res) {
         throw new Error('Invalid address or Tezos domain')

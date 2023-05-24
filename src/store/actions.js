@@ -9,6 +9,8 @@ const SPLITTER_CREATED = 'splitter_created'
 
 const DISTRIBUTED = 'spltr_dstr'
 
+const SPLITTER_FORGOTTEN = 'splitter_forgotten'
+
 const connection = new HubConnectionBuilder()
   .withUrl(`${process.env.VUE_APP_TZKT_API_URL}/v1/ws`)
   .build()
@@ -24,6 +26,10 @@ async function initConnection () {
   })
   await connection.invoke('SubscribeToEvents', {
     tag: DISTRIBUTED
+  })
+  await connection.invoke('SubscribeToEvents', {
+    contract: process.env.VUE_APP_FACTORY_CONTRACT,
+    tag: SPLITTER_FORGOTTEN
   })
 }
 
@@ -58,12 +64,26 @@ export default {
 
       switch (tag) {
         case SPLITTER_CREATED:
-          dispatch('listUserSplitters')
+          // dispatch('listUserSplitters')
 
           commit('deployed', payload.nat)
 
           if (payload.address_0 === state.userAddress) {
-            toast.success('Splitter Contract Successfully deployed.')
+            toast.success('Splitter Deployed succsessfully.')
+
+            if (payload.map[state.userAddress]) {
+              commit('addUserSplitter', { splitter: payload.address_1, createdAt: new Date(timestamp) })
+            }
+          }
+
+          break
+        case SPLITTER_FORGOTTEN:
+          // dispatch('listUserSplitters')
+
+          if (payload.address_0 === state.userAddress) {
+            commit('removeUserSplitter', payload.address_1)
+
+            toast.success('Splitter removed from your list.')
           }
 
           break

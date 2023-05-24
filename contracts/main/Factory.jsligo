@@ -52,7 +52,7 @@ const create = (p : map<address, nat>, s : storage) : return_ => {
         holders = Big_map.add([item[0], originate[1]], Tezos.get_now(), holders)
     };
 
-    return [list([originate[0], Tezos.emit("%splitter_created", [Tezos.get_sender(), [originate[1], splitters]])]), { ...s, splitters, holders }];
+    return [list([originate[0], Tezos.emit("%splitter_created", [[Tezos.get_sender(), originate[1]], [p, splitters]])]), { ...s, splitters, holders }];
 };
 
 // Let user to 'forget' splitter. Just remove it from big_map.
@@ -61,7 +61,7 @@ const forget = (p : address, s : storage) : return_ => {
 
     let holders = Big_map.remove([Tezos.get_sender(), p], s.holders);
 
-    return [noop, { ...s, holders }];
+    return [list([Tezos.emit("%splitter_forgotten", [Tezos.get_sender(), p])]), { ...s, holders }];
 };
 
 const main = (p : action, s : storage) : return_ =>

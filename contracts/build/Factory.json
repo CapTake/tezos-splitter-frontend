@@ -1617,10 +1617,10 @@
                   "prim": "PAIR"
                 },
                 {
-                  "prim": "DIG",
+                  "prim": "DUP",
                   "args": [
                     {
-                      "int": "3"
+                      "int": "4"
                     }
                   ]
                 },
@@ -1686,7 +1686,7 @@
                   "prim": "DIG",
                   "args": [
                     {
-                      "int": "3"
+                      "int": "4"
                     }
                   ]
                 },
@@ -1753,6 +1753,17 @@
                   ]
                 },
                 {
+                  "prim": "DIG",
+                  "args": [
+                    {
+                      "int": "4"
+                    }
+                  ]
+                },
+                {
+                  "prim": "PAIR"
+                },
+                {
                   "prim": "DUP",
                   "args": [
                     {
@@ -1764,10 +1775,10 @@
                   "prim": "CDR"
                 },
                 {
-                  "prim": "PAIR"
+                  "prim": "SENDER"
                 },
                 {
-                  "prim": "SENDER"
+                  "prim": "PAIR"
                 },
                 {
                   "prim": "PAIR"
@@ -1779,10 +1790,26 @@
                       "prim": "pair",
                       "args": [
                         {
-                          "prim": "address"
+                          "prim": "pair",
+                          "args": [
+                            {
+                              "prim": "address"
+                            },
+                            {
+                              "prim": "address"
+                            }
+                          ]
                         },
                         {
-                          "prim": "address"
+                          "prim": "map",
+                          "args": [
+                            {
+                              "prim": "address"
+                            },
+                            {
+                              "prim": "nat"
+                            }
+                          ]
                         },
                         {
                           "prim": "nat"
@@ -1807,9 +1834,6 @@
                 },
                 {
                   "prim": "CAR"
-                },
-                {
-                  "prim": "CONS"
                 }
               ],
               [
@@ -1870,7 +1894,12 @@
                   "prim": "CAR"
                 },
                 {
-                  "prim": "SWAP"
+                  "prim": "DUP",
+                  "args": [
+                    {
+                      "int": "2"
+                    }
+                  ]
                 },
                 {
                   "prim": "SENDER"
@@ -1896,7 +1925,7 @@
                   "prim": "DUP",
                   "args": [
                     {
-                      "int": "2"
+                      "int": "3"
                     }
                   ]
                 },
@@ -1904,7 +1933,7 @@
                   "prim": "DIG",
                   "args": [
                     {
-                      "int": "2"
+                      "int": "3"
                     }
                   ]
                 },
@@ -1942,9 +1971,45 @@
                       "prim": "operation"
                     }
                   ]
+                },
+                {
+                  "prim": "DIG",
+                  "args": [
+                    {
+                      "int": "2"
+                    }
+                  ]
+                },
+                {
+                  "prim": "SENDER"
+                },
+                {
+                  "prim": "PAIR"
+                },
+                {
+                  "prim": "EMIT",
+                  "args": [
+                    {
+                      "prim": "pair",
+                      "args": [
+                        {
+                          "prim": "address"
+                        },
+                        {
+                          "prim": "address"
+                        }
+                      ]
+                    }
+                  ],
+                  "annots": [
+                    "%splitter_forgotten"
+                  ]
                 }
               ]
             ]
+          },
+          {
+            "prim": "CONS"
           },
           {
             "prim": "PAIR"

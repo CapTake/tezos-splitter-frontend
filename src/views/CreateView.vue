@@ -20,7 +20,7 @@
               <div>Address</div>
               <div>Share</div>
             </div>
-            <div v-for="(item, index) in holders" :key="item.address + index" class="my-4">
+            <div v-for="(item, index) in holders" :key="index" class="my-4">
                 <div class="flex gap-3">
                     <div class="relative grow">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -66,7 +66,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { validateAddress } from '@taquito/utils'
+import { isValidAddress } from '../utils/tezos'
 import tzdomains from '../utils/tezos-domains'
 import { MichelsonMap } from '@taquito/taquito'
 
@@ -143,15 +143,15 @@ const resolveAddress = async (item) => {
   }
 }
 
-const validateItem = useDebounceFn(item => {
+const validateItem = useDebounceFn(async item => {
   try {
     item.error = ''
 
     if (!item.address) return
 
-    if (item.address?.includes('.')) return resolveAddress(item)
+    if (item.address?.includes('.')) return await resolveAddress(item)
 
-    if (validateAddress(item.address) !== 3) throw new Error('Invalid address')
+    if (!isValidAddress(item.address)) throw new Error('Invalid address')
 
     if (item.address.startsWith('tz4')) throw new Error('Unsupported address type')
   } catch (e) {

@@ -13,6 +13,11 @@ export default {
     return res
   },
   async resolveNameToAddress (name) {
-    return await client.resolver.resolveNameToAddress(name)
+    try {
+      const address = await client.resolver.resolveNameToAddress(name)
+      return address
+    } catch (e) {
+      console.log(e.message)
+    }
   }
 }

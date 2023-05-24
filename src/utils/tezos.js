@@ -1,5 +1,6 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito'
+import { validateAddress } from '@taquito/utils'
 import { TzktExtension } from '@tzkt/ext-taquito'
 import { Tzip12Module } from '@taquito/tzip12'
 import { Tzip16Module } from '@taquito/tzip16'
@@ -40,4 +41,13 @@ const getContract = async (address) => {
   return Tezos.wallet.at(address)
 }
 
-export { wallet, getActiveAccount, requestPermissions, clearActiveAccount, getContract, Tezos }
+const isValidAddress = address => {
+  try {
+    return validateAddress(address) === 3
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+}
+
+export { wallet, getActiveAccount, requestPermissions, clearActiveAccount, getContract, Tezos, isValidAddress }

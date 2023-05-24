@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import AboutView from '../views/AboutView.vue'
+import NotFound from '../views/NotFound.vue'
 import ContractListView from '../views/ContractListView.vue'
 import { useTitle } from '@vueuse/core'
 
@@ -17,7 +19,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: AboutView
   },
   {
     path: '/splitters',
@@ -42,7 +44,7 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     meta: { title: 'Splittez - Page not found' },
-    component: () => import(/* webpackChunkName: "e404" */ '../views/NotFound.vue')
+    component: NotFound
   }
 ]
 

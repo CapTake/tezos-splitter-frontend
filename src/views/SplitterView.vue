@@ -62,7 +62,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { watchImmediate } from '@vueuse/core'
-import { validateAddress } from '@taquito/utils'
+import { isValidAddress } from '../utils/tezos'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
@@ -152,7 +152,7 @@ const distribute = async (token, amount) => {
 }
 
 watchImmediate(props.addr, async function () {
-  if (!props.addr.startsWith('KT') || validateAddress(props.addr) !== 3) {
+  if (!props.addr.startsWith('KT') || !isValidAddress(props.addr)) {
     toast.error('Invalid Splitter Address')
     router.replace('/')
   }
